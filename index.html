@@ -1,0 +1,212 @@
+<body>
+    <div class="bgImg"></div>
+    <div id="clock">
+        <div id="min"></div>
+        <div id="hour"></div>
+    </div>
+    <div class="wrapperWrapper">
+        <div class="Wrapper">
+            <nav>
+                <ul>
+                    <li class="active" id="tab1" onclick="DefinVariables(1)">
+                        <div>First</div>
+                    </li>
+                    <li id="tab2" onclick="DefinVariables(2)">
+                        <div>Second</div>
+                    </li>
+                    <li id="tab3" onclick="DefinVariables(3)">
+                        <div>Third</div>
+                    </li>
+                </ul>
+                <div id="lineId" class="line"></div>
+            </nav>
+            <textarea id="idTextarea" cols="30" rows="10" placeholder="Add your notes here..." onblur="writeNote(1)"></textarea>
+        </div>
+    </div>
+</body>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: #1A1E23;
+        font-family: "Lato", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        display: flex;
+        justify-content: flex-end;
+        align-items: baseline;
+        height: 100vh;
+        margin: 0%;
+    }
+
+    .bgImg {
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        background-image: url("images/BG Sea.jpg");
+        filter: blur(15px) brightness(90%) saturate(100%);
+        background-size: cover;
+        z-index: -1;
+    }
+
+    #clock {
+        /* Add position */
+        margin: auto;
+        border-style: solid;
+        border-width: 2px;
+        border-radius: 50%;
+        border-color: #fff;
+        width: 50vh;
+        /* min-width: 50vw; */
+        height: 50vh;
+        /* min-height: 50vh; */
+        box-shadow: 0px 0px 70px -20px rgba(0,0,0,0.5);
+    }
+
+    #min {
+        background: #fff;
+        height: 40%;
+        left: 50%;
+        position: relative;
+        top: 50%;
+        width: 2px;
+        margin-top: 0px;
+        -webkit-transform-origin: 50% 100%;
+        -moz-transform-origin: 50% 100%;
+        -o-transform-origin: 50% 100%;
+        -ms-transform-origin: 50% 100%;
+        transform-origin: top 0px;
+        transform: rotate(0deg)
+    }
+
+    #hour {
+        background: #fff;
+        height: 30%;
+        left: 50%;
+        position: relative;
+        top: 50%;
+        width: 2px;
+        margin-top: 0px;
+        -webkit-transform-origin: 50% 100%;
+        -moz-transform-origin: 50% 100%;
+        -o-transform-origin: 50% 100%;
+        -ms-transform-origin: 50% 100%;
+        transform-origin: top 0px;
+        transform: rotate(0deg);
+        margin-top: -40%;
+    }
+
+    .wrapperWrapper {
+        box-shadow: 14px 0px 30px 19px rgba(0, 0, 0, 0.53);
+        height: 100%;
+        padding-left: 15px;
+        background: #1A1E23;
+    }
+
+    .Wrapper {
+        margin-right: 25px;
+    }
+
+    nav {
+        right: 0;
+        margin-top: 10%;
+        position: relative;
+        padding-bottom: 10px;
+    }
+
+    .line {
+        height: 2px;
+        position: absolute;
+        bottom: 0;
+        margin: 10px 0 0 0;
+        background: #FF1847;
+        transition: 0.3s;
+    }
+
+    nav ul {
+        padding: 0;
+        margin: 0 2px 0 2px;
+        list-style: none;
+        display: flex;
+    }
+
+    nav ul li {
+        margin: 0 40px 0 0;
+        opacity: 0.4;
+        transition: all 0.4s ease;
+    }
+
+    nav ul li:hover {
+        opacity: 0.7;
+    }
+
+    nav ul li.active {
+        opacity: 1;
+    }
+
+    nav ul li:last-child {
+        margin-right: 0;
+    }
+
+    nav ul li div {
+        text-decoration: none;
+        color: #fff;
+        text-transform: uppercase;
+        display: block;
+        font-weight: 600;
+        letter-spacing: 0.2em;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    textarea {
+        font-family: "Lato", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        font-size: 1em;
+        margin-top: 15px;
+        color: #eee;
+        width: 100%;
+        height: 90%;
+        outline: none;
+        border: none;
+        resize: none;
+        background-color: transparent
+    }
+</style>
+
+<script>
+    function startTime() {
+        var today = new Date();
+        var m = today.getMinutes() * 6 + 60;
+        var h = today.getHours() % 12 * 30 + m / 12;
+        document.getElementById("min").style.transform = "rotate(" + eval(180 + m) + "deg)";
+        document.getElementById("hour").style.transform = "rotate(" + eval(180 + h) + "deg)";
+        var t = setTimeout(startTime, 1000);
+    }
+    startTime()
+
+    var sSaveIn;
+
+    function Load(NumberL) {
+        document.getElementById("idTextarea").value = localStorage.getItem("Note" + NumberL);
+    }
+
+    function writeNote() {
+        console.log('Out');
+        localStorage.setItem("Note" + sSaveIn, document.getElementById("idTextarea").value);
+    }
+
+    function DefinVariables(activeTab) {
+        var vTab1 = document.getElementById("tab" + activeTab);
+        var nOffsetLeft = vTab1.offsetLeft;
+        var nOffsetWidth = vTab1.offsetWidth;
+        document.getElementById("lineId").style = "left: " + nOffsetLeft + "px; width:" + nOffsetWidth + "px;"
+        document.querySelector(".active").classList.remove("active");
+        vTab1.classList.add("active");
+        Load(activeTab)
+        sSaveIn = activeTab
+    }
+    DefinVariables(1)
+</script>
